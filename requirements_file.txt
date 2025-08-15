@@ -1,0 +1,44 @@
+# Core Data Processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# PDF Generation
+reportlab>=3.6.0
+
+# Email Support
+secure-smtplib>=0.1.1
+
+# Optional: Google Sheets Integration
+google-api-python-client>=2.0.0
+google-auth-httplib2>=0.1.0
+google-auth-oauthlib>=0.5.0
+
+# Optional: Database Support
+sqlalchemy>=1.4.0
+psycopg2-binary>=2.9.0  # PostgreSQL
+pymysql>=1.0.0  # MySQL
+
+# Optional: Cloud Storage
+google-cloud-storage>=2.0.0
+boto3>=1.26.0  # AWS S3
+dropbox>=11.0.0
+
+# Scheduling (Optional)
+schedule>=1.1.0
+APScheduler>=3.9.0
+
+# Development Tools
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+# Logging and Monitoring
+structlog>=22.0.0
+
+# Configuration Management
+python-dotenv>=0.19.0

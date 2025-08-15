@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Business Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --positive-color: #059669;
+            --negative-color: #dc2626;
+            --warning-color: #d97706;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f8f9fa;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #ffffff;
+        }
+
+        .report-container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--primary-color);
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin: 16px 0 8px 0;
+        }
+
+        .highlights-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .highlights-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .highlights-table td {
+            background-color: #fef7e0;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .highlights-table .change-positive {
+            color: var(--positive-color);
+            font-weight: bold;
+        }
+
+        .highlights-table .change-negative {
+            color: var(--negative-color);
+            font-weight: bold;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 11px;
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .comparison-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--bg-light);
+        }
+
+        .comparison-table tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .insight-box {
+            background-color: #fafafa;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .insight-box.excellent {
+            border-left-color: var(--positive-color);
+        }
+
+        .insight-box.concerning {
+            border-left-color: var(--warning-color);
+        }
+
+        .insight-box.critical {
+            border-left-color: var(--negative-color);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .recommendation {
+            background: #f8f9fa;
+            border: 1px solid var(--secondary-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+
+        .recommendation.high-priority {
+            border-left: 4px solid var(--negative-color);
+            background: #fff5f5;
+        }
+
+        .recommendation.medium-priority {
+            border-left: 4px solid var(--warning-color);
+            background: #fffbeb;
+        }
+
+        .recommendation.low-priority {
+            border-left: 4px solid var(--positive-color);
+            background: #f0fff4;
+        }
+
+        .risk-alert {
+            background: #fff5f5;
+            border: 2px solid var(--negative-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+
+        .opportunity {
+            background: #f0fff4;
+            border: 1px solid var(--positive-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .chart-canvas {
+            width: 100% !important;
+            height: 350px !important;
+        }
+
+        .chart-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-light);
+            font-style: italic;
+            font-size: 16px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        .page-break {
+            page-break-before: always;
+            margin-top: 50px;
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        @media print {
+            .report-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0.5in;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .report-container {
+                padding: 20px;
+            }
+            
+            .highlights-table, .comparison-table {
+                font-size: 10px;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <!-- Cover Page -->
+        <div class="header">
+            <h1 class="title">Weekly Business Report</h1>
+            <p class="subtitle">Report Period: January 8, 2025 - January 14, 2025</p>
+            <p class="subtitle">Generated on: August 16, 2025 at 14:30</p>
+        </div>
+
+        <!-- Key Highlights -->
+        <div class="section">
+            <table class="highlights-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Current Week</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Total Sales</strong></td>
+                        <td>$125,450</td>
+                        <td class="change-positive">+8.5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Orders</strong></td>
+                        <td>1,247</td>
+                        <td class="change-positive">+12.3%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Avg Order Value</strong></td>
+                        <td>$101</td>
+                        <td class="change-negative">-3.4%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Executive Summary -->
+        <div class="section">
+            <h2 class="section-title">Executive Summary</h2>
+            <p>This week showed strong performance across key metrics with total sales reaching $125,450, representing an 8.5% increase from the previous week. Order volume grew significantly by 12.3%, indicating improved customer acquisition or engagement. However, the average order value decreased by 3.4%, suggesting customers may be purchasing smaller quantities or lower-priced items.</p>
+            
+            <h3 class="section-subtitle">Key Performance Indicators</h3>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">$125.5K</div>
+                    <div class="kpi-label">Total Sales Revenue</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">1,247</div>
+                    <div class="kpi-label">Orders Processed</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">$101</div>
+                    <div class="kpi-label">Average Order Value</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">94.2%</div>
+                    <div class="kpi-label">Customer Satisfaction</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Detailed Metrics -->
+        <div class="section">
+            <h2 class="section-title">Detailed Performance Metrics</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Current Week</th>
+                        <th>Previous Week</th>
+                        <th>Absolute Change</th>
+                        <th>Percentage Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sales Revenue</strong></td>
+                        <td>$125,450</td>
+                        <td>$115,630</td>
+                        <td>$9,820</td>
+                        <td>+8.5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Order Volume</strong></td>
+                        <td>1,247</td>
+                        <td>1,110</td>
+                        <td>+137</td>
+                        <td>+12.3%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Average Order Value</strong></td>
+                        <td>$101</td>
+                        <td>$104</td>
+                        <td>-$3</td>
+                        <td>-3.4%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="section-subtitle">Historical Performance Overview</h3>
+            <p><strong>Total Revenue:</strong> $1,245,600 across 10 weeks<br>
+            <strong>Average Weekly Sales:</strong> $124,560<br>
+            <strong>Total Orders:</strong> 12,340 orders<br>
+            <strong>Overall Growth Rate:</strong> +2.8% compound weekly growth<br>
+            <strong>Performance Range:</strong> $95,200 - $135,800</p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Charts Section -->
+        <div class="section">
+            <h2 class="section-title">Performance Visualizations</h2>
+            
+            <h3 class="section-subtitle">Sales Performance Trend</h3>
+            <div class="chart-container">
+                <canvas id="salesTrendChart" class="chart-canvas"></canvas>
+                <div id="loading1" class="chart-loading">Loading chart...</div>
+            </div>
+
+            <h3 class="section-subtitle">Orders and Average Order Value Trend</h3>
+            <div class="chart-container">
+                <canvas id="ordersAovChart" class="chart-canvas"></canvas>
+                <div id="loading2" class="chart-loading">Loading chart...</div>
+            </div>
+
+            <h3 class="section-subtitle">Product Performance Analysis</h3>
+            <div class="chart-container">
+                <canvas id="productChart" class="chart-canvas"></canvas>
+                <div id="loading3" class="chart-loading">Loading chart...</div>
+            </div>
+
+            <h3 class="section-subtitle">Customer Distribution Analysis</h3>
+            <div class="chart-container">
+                <canvas id="customerChart" class="chart-canvas"></canvas>
+                <div id="loading4" class="chart-loading">Loading chart...</div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Performance Analysis -->
+        <div class="section">
+            <h2 class="section-title">Performance Analysis</h2>
+            
+            <div class="insight-box excellent">
+                <strong>📈 Sales Growth</strong><br>
+                Excellent performance with 8.5% week-over-week growth, indicating strong market demand and effective sales strategies.
+            </div>
+
+            <div class="insight-box excellent">
+                <strong>🛒 Order Volume</strong><br>
+                Outstanding 12.3% increase in order volume suggests improved customer acquisition and retention efforts.
+            </div>
+
+            <div class="insight-box concerning">
+                <strong>💰 Average Order Value</strong><br>
+                Concerning 3.4% decrease in AOV may indicate customers are buying smaller quantities or shifting to lower-priced items.
+            </div>
+
+            <h3 class="section-subtitle">Trend Analysis</h3>
+            <div class="insight-box">
+                <strong>📊 Revenue Trend - Upward</strong><br>
+                Strong upward momentum in revenue with consistent growth pattern over the past 4 weeks.<br>
+                <em>Volatility: Low</em>
+            </div>
+
+            <div class="insight-box">
+                <strong>🎯 Customer Acquisition - Accelerating</strong><br>
+                New customer acquisition rate has increased by 15% this week, indicating effective marketing campaigns.<br>
+                <em>Volatility: Medium</em>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Insights & Recommendations -->
+        <div class="section">
+            <h2 class="section-title">Business Insights & Recommendations</h2>
+
+            <h3 class="section-subtitle">Strategic Recommendations</h3>
+
+            <div class="recommendation high-priority">
+                <strong>🎯 High Priority</strong><br>
+                <strong>Optimize Average Order Value</strong><br>
+                <em>Category:</em> Sales Strategy<br>
+                <em>Description:</em> Implement bundle offers and cross-selling strategies to increase AOV<br>
+                <em>Expected Impact:</em> +5-8% AOV increase | <em>Timeline:</em> 2-3 weeks
+            </div>
+
+            <div class="recommendation medium-priority">
+                <strong>⚡ Medium Priority</strong><br>
+                <strong>Enhance Customer Retention</strong><br>
+                <em>Category:</em> Customer Experience<br>
+                <em>Description:</em> Launch loyalty program to retain high-value customers<br>
+                <em>Expected Impact:</em> +10% repeat purchases | <em>Timeline:</em> 4-6 weeks
+            </div>
+
+            <div class="recommendation low-priority">
+                <strong>📊 Low Priority</strong><br>
+                <strong>Expand Product Line</strong><br>
+                <em>Category:</em> Product Strategy<br>
+                <em>Description:</em> Introduce complementary products to increase market share<br>
+                <em>Expected Impact:</em> +3-5% revenue growth | <em>Timeline:</em> 8-12 weeks
+            </div>
+
+            <h3 class="section-subtitle">Risk Assessment</h3>
+            <div class="risk-alert">
+                <strong>⚠️ Order Value Decline (Medium Risk)</strong><br>
+                <em>Issue:</em> Consistent decrease in average order value over past 2 weeks<br>
+                <em>Mitigation:</em> Implement minimum order thresholds with incentives and promotional bundling
+            </div>
+
+            <h3 class="section-subtitle">Growth Opportunities</h3>
+            <div class="opportunity">
+                <strong>🚀 Customer Acquisition (High Potential)</strong><br>
+                <em>Opportunity:</em> Strong conversion rates indicate potential for scaled marketing spend<br>
+                <em>Recommended Action:</em> Increase ad budget by 20% in highest-performing channels
+            </div>
+
+            <div class="opportunity">
+                <strong>📱 Mobile Optimization (Medium Potential)</strong><br>
+                <em>Opportunity:</em> 35% of traffic is mobile but conversion rate is 12% lower than desktop<br>
+                <em>Recommended Action:</em> Optimize mobile checkout process and page load speeds
+            </div>
+
+            <h3 class="section-subtitle">Product & Customer Analysis</h3>
+            <div class="insight-box">
+                <strong>🏆 Top Performing Product</strong><br>
+                Premium Widget Series generating 28% of total revenue with 15% margin improvement<br>
+                <em>Action:</em> Increase inventory and consider expanding product variations
+            </div>
+
+            <div class="insight-box">
+                <strong>👥 Customer Segmentation</strong><br>
+                High-value customers (top 20%) contribute 65% of revenue but show 8% decline in frequency<br>
+                <em>Action:</em> Launch targeted retention campaign with personalized offers
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Confidential - Business Intelligence Report | Page 1</p>
+            <p>Report by: Business Analytics System | Generated: August 16, 2025</p>
+        </div>
+    </div>
+
+    <!-- Load Chart.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <script>
+        // Check if Chart.js loaded
+        function checkChartJS() {
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js failed to load');
+                document.querySelectorAll('.chart-loading').forEach(el => {
+                    el.textContent = 'Charts unavailable - Chart.js failed to load';
+                    el.style.color = '#dc2626';
+                });
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize charts when page loads
+        function initializeCharts() {
+            if (!checkChartJS()) return;
+
+            console.log('Chart.js loaded successfully, creating charts...');
+
+            // Sample data for charts
+            const weekLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Current Week'];
+            const salesData = [95200, 108500, 112300, 98750, 115630, 119200, 125450];
+            const ordersData = [950, 1080, 1120, 990, 1110, 1190, 1247];
+            const aovData = [100, 100.5, 100.3, 99.7, 104, 100.2, 101];
+
+            // Chart.js default configuration
+            Chart.defaults.font.family = 'Arial, sans-serif';
+            Chart.defaults.color = '#1f2937';
+
+            try {
+                // Sales Trend Chart
+                const salesCtx = document.getElementById('salesTrendChart');
+                if (salesCtx) {
+                    new Chart(salesCtx, {
+                        type: 'line',
+                        data: {
+                            labels: weekLabels,
+                            datasets: [{
+                                label: 'Weekly Sales ($)',
+                                data: salesData,
+                                borderColor: '#2563eb',
+                                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#2563eb',
+                                pointBorderColor: '#ffffff',
+                                pointBorderWidth: 2,
+                                pointRadius: 6,
+                                pointHoverRadius: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Weekly Sales Performance',
+                                    font: { size: 16, weight: 'bold' },
+                                    color: '#1f2937'
+                                },
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return '$' + (value/1000).toFixed(0) + 'K';
+                                        },
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        color: 'rgba(229, 231, 235, 0.5)'
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        color: 'rgba(229, 231, 235, 0.5)'
+                                    }
+                                }
+                            },
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            }
+                        }
+                    });
+                    document.getElementById('loading1').style.display = 'none';
+                    console.log('Sales chart created successfully');
+                }
+
+                // Orders and AOV Chart (Dual Axis)
+                const ordersCtx = document.getElementById('ordersAovChart');
+                if (ordersCtx) {
+                    new Chart(ordersCtx, {
+                        type: 'line',
+                        data: {
+                            labels: weekLabels,
+                            datasets: [{
+                                label: 'Orders',
+                                data: ordersData,
+                                borderColor: '#059669',
+                                backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                                borderWidth: 3,
+                                fill: false,
+                                tension: 0.4,
+                                yAxisID: 'y',
+                                pointBackgroundColor: '#059669',
+                                pointBorderColor: '#ffffff',
+                                pointBorderWidth: 2,
+                                pointRadius: 5
+                            }, {
+                                label: 'Average Order Value ($)',
+                                data: aovData,
+                                borderColor: '#d97706',
+                                backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                                borderWidth: 3,
+                                fill: false,
+                                tension: 0.4,
+                                yAxisID: 'y1',
+                                pointBackgroundColor: '#d97706',
+                                pointBorderColor: '#ffffff',
+                                pointBorderWidth: 2,
+                                pointRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Orders Volume vs Average Order Value',
+                                    font: { size: 16, weight: 'bold' },
+                                    color: '#1f2937'
+                                },
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        usePointStyle: true,
+                                        padding: 20
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Orders',
+                                        color: '#059669',
+                                        font: { weight: 'bold' }
+                                    },
+                                    ticks: {
+                                        color: '#059669'
+                                    },
+                                    grid: {
+                                        color: 'rgba(229, 231, 235, 0.5)'
+                                    }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: {
+                                        display: true,
+                                        text: 'Average Order Value ($)',
+                                        color: '#d97706',
+                                        font: { weight: 'bold' }
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return '$' + value.toFixed(0);
+                                        },
+                                        color: '#d97706'
+                                    },
+                                    grid: {
+                                        drawOnChartArea: false,
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        color: 'rgba(229, 231, 235, 0.5)'
+                                    }
+                                }
+                            },
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            }
+                        }
+                    });
+                    document.getElementById('loading2').style.display = 'none';
+                    console.log('Orders/AOV chart created successfully');
+                }
+
+                // Product Performance Chart (Bar Chart)
+                const productCtx = document.getElementById('productChart');
+                if (productCtx) {
+                    new Chart(productCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Premium Widget', 'Standard Widget', 'Basic Widget', 'Widget Pro', 'Widget Lite'],
+                            datasets: [{
+                                label: 'Revenue ($)',
+                                data: [35126, 28450, 22800, 19850, 15200],
+                                backgroundColor: [
+                                    'rgba(37, 99, 235, 0.8)',
+                                    'rgba(5, 150, 105, 0.8)',
+                                    'rgba(217, 119, 6, 0.8)',
+                                    'rgba(220, 38, 38, 0.8)',
+                                    'rgba(124, 58, 237, 0.8)'
+                                ],
+                                borderColor: [
+                                    '#2563eb',
+                                    '#059669',
+                                    '#d97706',
+                                    '#dc2626',
+                                    '#7c3aed'
+                                ],
+                                borderWidth: 2,
+                                borderRadius: 4,
+                                borderSkipped: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Product Revenue Distribution - Current Week',
+                                    font: { size: 16, weight: 'bold' },
+                                    color: '#1f2937'
+                                },
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return '$' + (value/1000).toFixed(0) + 'K';
+                                        },
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        color: 'rgba(229, 231, 235, 0.5)'
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        color: '#6b7280'
+                                    },
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    document.getElementById('loading3').style.display = 'none';
+                    console.log('Product chart created successfully');
+                }
+
+                // Customer Distribution Chart (Doughnut)
+                const customerCtx = document.getElementById('customerChart');
+                if (customerCtx) {
+                    new Chart(customerCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['New Customers', 'Returning Customers', 'VIP Customers', 'Inactive (Re-engaged)'],
+                            datasets: [{
+                                data: [35, 45, 15, 5],
+                                backgroundColor: [
+                                    'rgba(37, 99, 235, 0.8)',
+                                    'rgba(5, 150, 105, 0.8)',
+                                    'rgba(217, 119, 6, 0.8)',
+                                    'rgba(100, 116, 139, 0.8)'
+                                ],
+                                borderColor: [
+                                    '#2563eb',
+                                    '#059669',
+                                    '#d97706',
+                                    '#64748b'
+                                ],
+                                borderWidth: 3,
+                                hoverOffset: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Customer Distribution - Current Week',
+                                    font: { size: 16, weight: 'bold' },
+                                    color: '#1f2937'
+                                },
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true,
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed;
+                                            return label + ': ' + value + '%';
+                                        }
+                                    }
+                                }
+                            },
+                            cutout: '50%'
+                        }
+                    });
+                    document.getElementById('loading4').style.display = 'none';
+                    console.log('Customer chart created successfully');
+                }
+
+                console.log('All charts initialized successfully');
+                
+            } catch (error) {
+                console.error('Error creating charts:', error);
+                document.querySelectorAll('.chart-loading').forEach(el => {
+                    el.textContent = 'Error loading chart: ' + error.message;
+                    el.style.color = '#dc2626';
+                });
+            }
+        }
+
+        // Load charts when page is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Give a small delay to ensure Chart.js is fully loaded
+                setTimeout(initializeCharts, 100);
+            });
+        } else {
+            // Page already loaded
+            setTimeout(initializeCharts, 100);
+        }
+
+        // Fallback: try to load charts after a longer delay if they haven't loaded
+        setTimeout(function() {
+            const loadingElements = document.querySelectorAll('.chart-loading[style*="display: none"]');
+            if (loadingElements.length === 0) {
+                console.log('Charts not loaded yet, trying again...');
+                initializeCharts();
+            }
+        }, 2000);
+
+        // Print optimization
+        window.addEventListener('beforeprint', () => {
+            if (typeof Chart !== 'undefined') {
+                Chart.helpers.each(Chart.instances, (chart) => {
+                    chart.resize();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
